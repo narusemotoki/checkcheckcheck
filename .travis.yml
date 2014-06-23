@@ -1,3 +1,17 @@
+ubuntu-version: 14.04
+
+language: php
+php:
+  - '5.3'
 before_script:
-  - psql -c "CREATE DATABASE checkcheckcheck_test ENCODING 'UTF8';" -U postgres
-  - psql -c "CREATE SCHEMA checkcheckcheck_schema;" -U postgres -d checkcheckcheck_test
+  - sudo apt-get install enchant php5-enchant subversion libenchant-dev
+  - svn checkout http://svn.php.net/repository/pecl/enchant/trunk enchant
+  - cd enchant
+  - phpize
+  - ./configure
+  - make
+  - make install
+  - echo "extension=enchant.so" > enchant.ini && phpenv config-add enchant.ini
+  - cd ..
+script:
+  - php enchant.php
